@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Manutenção Veicular</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +24,7 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
 
+    <!-- Login View -->
     <div id="login-container" class="w-full max-w-md text-center">
         <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700">
             <h1 class="text-2xl font-bold text-cyan-400 mb-2">Calculadora Veicular</h1>
@@ -35,6 +36,7 @@
         </div>
     </div>
     
+    <!-- Main App View -->
     <div id="app-container" class="w-full max-w-md space-y-6 hidden">
         <div class="bg-gray-800 p-3 sm:p-4 rounded-2xl shadow-lg border border-gray-700 flex justify-between items-center">
              <div id="user-info" class="text-sm text-gray-300 truncate pr-2"></div>
@@ -42,7 +44,6 @@
                  Sair
              </button>
         </div>
-
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <h2 class="text-xl font-bold text-cyan-400 mb-4 text-center">Adicionar Nova Rodagem</h2>
             <form id="add-km-form" class="space-y-4">
@@ -59,7 +60,6 @@
                 </button>
             </form>
         </div>
-        
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-cyan-400">Histórico de Rodagem</h2>
@@ -75,7 +75,6 @@
                 <p><span id="total-km" class="text-3xl font-bold text-white">0</span> <span class="text-gray-400">KM</span></p>
             </div>
         </div>
-
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="text-center mb-8">
                 <h1 class="text-2xl font-bold text-cyan-400">Calcular Custo Final</h1>
@@ -106,6 +105,7 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, doc, deleteDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // --- ELEMENT REFERENCES ---
         const loginContainer = document.getElementById('login-container');
         const appContainer = document.getElementById('app-container');
         const loginBtn = document.getElementById('login-btn');
@@ -124,19 +124,31 @@
         const resultLiters = document.getElementById('result-liters');
         const resultReais = document.getElementById('result-reais');
 
+        // --- APP STATE ---
         let db, auth, userId;
         let totalKmState = 0;
         let tripsCollectionRef;
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // --- FIREBASE SETUP ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDx6ck0EDiDKP0MvHjeeYHdBdO4iFLQX00",
+            authDomain: "calculadora-veicular.firebaseapp.com",
+            projectId: "calculadora-veicular",
+            storageBucket: "calculadora-veicular.appspot.com",
+            messagingSenderId: "463638882821",
+            appId: "1:463638882821:web:17720fa4ea9af3e9ee4a6c"
+        };
+        
         const app = initializeApp(firebaseConfig);
+        const appId = firebaseConfig.appId; 
         db = getFirestore(app);
         auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         
+        // --- AUTHENTICATION ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                // User is signed in
                 userId = user.uid;
                 tripsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/trips`);
                 listenForTrips();
@@ -146,9 +158,11 @@
                 loginContainer.classList.add('hidden');
                 appContainer.classList.remove('hidden');
             } else {
+                // User is signed out
                 userId = null;
                 tripsCollectionRef = null;
 
+                // Clear UI
                 historyList.innerHTML = '';
                 historyList.appendChild(historyPlaceholder);
                 historyPlaceholder.classList.remove('hidden');
@@ -164,12 +178,13 @@
             }
         });
 
+        // --- DATA HANDLING & UI ---
         const listenForTrips = () => {
             if (!tripsCollectionRef) return;
             const q = query(tripsCollectionRef);
             onSnapshot(q, (snapshot) => {
                 let currentTotalKm = 0;
-                historyList.innerHTML = '';
+                historyList.innerHTML = ''; // Clear list
 
                 if (snapshot.empty) {
                     historyList.appendChild(historyPlaceholder);
@@ -181,6 +196,7 @@
                         trips.push({ id: doc.id, ...doc.data() });
                     });
 
+                    // Sort by date, newest first
                     trips.sort((a, b) => (b.date?.toDate() || 0) - (a.date?.toDate() || 0));
 
                     trips.forEach(trip => {
@@ -208,6 +224,7 @@
             });
         };
 
+        // --- EVENT LISTENERS ---
         loginBtn.addEventListener('click', () => {
             signInWithPopup(auth, provider)
                 .catch((error) => {
