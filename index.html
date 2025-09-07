@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Manutenção Veicular</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0CzdlIQHNi1HA vegg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -19,6 +20,23 @@
         }
         input[type=number] {
             -moz-appearance: textfield;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #report-section, #report-section * {
+                visibility: visible;
+            }
+            #report-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            #print-btn, #share-btn, #back-to-app-btn {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -38,12 +56,14 @@
     
     <!-- Main App View -->
     <div id="app-container" class="w-full max-w-md space-y-6 hidden">
+        <!-- User Info and Logout -->
         <div class="bg-gray-800 p-3 sm:p-4 rounded-2xl shadow-lg border border-gray-700 flex justify-between items-center">
              <div id="user-info" class="text-sm text-gray-300 truncate pr-2"></div>
              <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-1 px-3 rounded-lg transition-transform transform hover:scale-105 shadow-md flex-shrink-0">
                  Sair
              </button>
         </div>
+        <!-- Add Trip Form -->
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <h2 class="text-xl font-bold text-cyan-400 mb-4 text-center">Adicionar Nova Rodagem</h2>
             <form id="add-km-form" class="space-y-4">
@@ -60,6 +80,7 @@
                 </button>
             </form>
         </div>
+        <!-- History -->
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-cyan-400">Histórico de Rodagem</h2>
@@ -75,6 +96,7 @@
                 <p><span id="total-km" class="text-3xl font-bold text-white">0</span> <span class="text-gray-400">KM</span></p>
             </div>
         </div>
+        <!-- Calculation -->
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="text-center mb-8">
                 <h1 class="text-2xl font-bold text-cyan-400">Calcular Custo Final</h1>
@@ -88,9 +110,14 @@
                         <input type="number" id="price" name="price" step="0.01" placeholder="Ex: 5.89" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 pl-10 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 shadow-lg">
-                    Calcular
-                </button>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 shadow-lg">
+                        Calcular
+                    </button>
+                    <button type="button" id="generate-report-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 shadow-lg">
+                        Gerar Relatório
+                    </button>
+                </div>
             </form>
             <div id="result-container" class="mt-8 text-center hidden">
                 <p class="text-gray-400">Valor Total a ser Pago:</p>
@@ -99,6 +126,70 @@
             </div>
         </div>
     </div>
+
+     <!-- Report Section (hidden by default) -->
+    <div id="report-section" class="hidden absolute top-0 left-0 w-full bg-white text-black p-4 sm:p-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Relatório de Rodagem</h1>
+                    <p id="report-user" class="text-gray-600"></p>
+                    <p id="report-date" class="text-gray-600"></p>
+                </div>
+                <div id="report-actions" class="flex flex-wrap items-center justify-start gap-2">
+                     <button id="back-to-app-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Voltar</button>
+                     <button id="share-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Compartilhar</button>
+                     <button id="print-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Imprimir</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 text-center">
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-gray-600">Total KM Rodados</p>
+                    <p id="report-total-km" class="text-2xl font-bold text-gray-900"></p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-gray-600">Preço do Combustível</p>
+                    <p id="report-fuel-price" class="text-2xl font-bold text-gray-900"></p>
+                </div>
+                 <div class="bg-green-100 p-4 rounded-lg border border-green-300">
+                    <p class="text-sm font-bold text-green-800">Valor Final a Pagar</p>
+                    <p id="report-final-value" class="text-2xl font-bold text-green-900"></p>
+                </div>
+            </div>
+
+            <div class="mb-8 p-4 bg-gray-50 rounded-lg border">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Explicação do Cálculo</h2>
+                <p class="text-gray-700">O valor final é composto por duas partes, convertidas para Reais (R$):</p>
+                <ul class="list-disc list-inside mt-2 space-y-1 text-gray-600">
+                    <li><b>Custo de Combustível:</b> O total de KM é dividido por 12 (considerando um consumo de 12 km/l).</li>
+                    <li><b>Custo de Manutenção:</b> O total de KM é multiplicado por um fator de R$ 0,12 por quilômetro rodado.</li>
+                </ul>
+                <p class="mt-4 font-mono text-sm bg-gray-200 p-2 rounded">
+                    Fórmula: Valor em Reais = ( (Total KM / 12) + (Total KM * 0.12) / Preço do Litro ) * Preço do Litro
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Detalhes das Viagens</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left">Data</th>
+                                <th class="py-2 px-4 border-b text-left">Observação</th>
+                                <th class="py-2 px-4 border-b text-right">KM</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-history-table">
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -123,11 +214,19 @@
         const resultContainer = document.getElementById('result-container');
         const resultLiters = document.getElementById('result-liters');
         const resultReais = document.getElementById('result-reais');
-
+        const generateReportBtn = document.getElementById('generate-report-btn');
+        const reportSection = document.getElementById('report-section');
+        const printBtn = document.getElementById('print-btn');
+        const shareBtn = document.getElementById('share-btn');
+        const backToAppBtn = document.getElementById('back-to-app-btn');
+        
         // --- APP STATE ---
         let db, auth, userId;
         let totalKmState = 0;
         let tripsCollectionRef;
+        let tripsState = [];
+        let lastCalculation = { price: 0, totalReais: 0 };
+
 
         // --- FIREBASE SETUP ---
         const firebaseConfig = {
@@ -148,21 +247,15 @@
         // --- AUTHENTICATION ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is signed in
                 userId = user.uid;
                 tripsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/trips`);
                 listenForTrips();
-
                 userInfo.textContent = `Olá, ${user.displayName || user.email}`;
-                
                 loginContainer.classList.add('hidden');
                 appContainer.classList.remove('hidden');
             } else {
-                // User is signed out
                 userId = null;
                 tripsCollectionRef = null;
-
-                // Clear UI
                 historyList.innerHTML = '';
                 historyList.appendChild(historyPlaceholder);
                 historyPlaceholder.classList.remove('hidden');
@@ -172,9 +265,9 @@
                 priceInput.value = '';
                 newKmInput.value = '';
                 newObsInput.value = '';
-                
                 loginContainer.classList.remove('hidden');
                 appContainer.classList.add('hidden');
+                reportSection.classList.add('hidden');
             }
         });
 
@@ -184,26 +277,24 @@
             const q = query(tripsCollectionRef);
             onSnapshot(q, (snapshot) => {
                 let currentTotalKm = 0;
-                historyList.innerHTML = ''; // Clear list
-
+                historyList.innerHTML = ''; 
                 if (snapshot.empty) {
                     historyList.appendChild(historyPlaceholder);
                     historyPlaceholder.classList.remove('hidden');
+                    tripsState = [];
                 } else {
                     historyPlaceholder.classList.add('hidden');
                     const trips = [];
                     snapshot.forEach(doc => {
                         trips.push({ id: doc.id, ...doc.data() });
                     });
-
-                    // Sort by date, newest first
                     trips.sort((a, b) => (b.date?.toDate() || 0) - (a.date?.toDate() || 0));
+                    tripsState = trips;
 
                     trips.forEach(trip => {
                         currentTotalKm += trip.km;
                         const date = trip.date ? trip.date.toDate().toLocaleDateString('pt-BR') : 'Data inválida';
                         const obsText = trip.obs ? `<p class="text-xs text-gray-400 mt-1 truncate">${trip.obs}</p>` : '';
-
                         const tripElement = document.createElement('div');
                         tripElement.className = 'bg-gray-700 p-3 rounded-lg';
                         tripElement.innerHTML = `
@@ -218,7 +309,6 @@
                         historyList.appendChild(tripElement);
                     });
                 }
-                
                 totalKmState = currentTotalKm;
                 totalKmSpan.textContent = currentTotalKm.toFixed(0);
             });
@@ -226,32 +316,26 @@
 
         // --- EVENT LISTENERS ---
         loginBtn.addEventListener('click', () => {
-            signInWithPopup(auth, provider)
-                .catch((error) => {
-                    console.error("Authentication failed: ", error);
+            signInWithPopup(auth, provider).catch((error) => {
+                console.error("Authentication failed: ", error);
+                if (error.code === 'auth/unauthorized-domain') {
+                    alert("Erro: Domínio não autorizado.\n\nPara que o login funcione, você precisa autorizar este domínio no seu projeto Firebase.\n\n1. Acesse o Firebase Console.\n2. Vá para Authentication -> Definições -> Domínios autorizados.\n3. Clique em 'Adicionar domínio' e insira: " + window.location.hostname);
+                } else {
                     alert("Falha no login com Google. Verifique o console para mais detalhes.");
-                });
+                }
+            });
         });
 
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth);
-        });
+        logoutBtn.addEventListener('click', () => signOut(auth));
 
         addKmForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const km = parseFloat(newKmInput.value);
             const obs = newObsInput.value.trim();
-
             if (!isNaN(km) && km > 0 && tripsCollectionRef) {
                 try {
-                    const tripData = {
-                        km: km,
-                        date: serverTimestamp()
-                    };
-                    if (obs) {
-                        tripData.obs = obs;
-                    }
-
+                    const tripData = { km: km, date: serverTimestamp() };
+                    if (obs) tripData.obs = obs;
                     await addDoc(tripsCollectionRef, tripData);
                     newKmInput.value = '';
                     newObsInput.value = '';
@@ -262,16 +346,12 @@
         });
 
         resetBtn.addEventListener('click', async () => {
-            if (!window.confirm('Tem certeza que deseja apagar todo o histórico? Esta ação não pode ser desfeita.')) {
-                return;
-            }
+            if (!window.confirm('Tem certeza que deseja apagar todo o histórico? Esta ação não pode ser desfeita.')) return;
             if (!tripsCollectionRef) return;
             try {
                 const querySnapshot = await getDocs(tripsCollectionRef);
                 const deletePromises = [];
-                querySnapshot.forEach((doc) => {
-                    deletePromises.push(deleteDoc(doc.ref));
-                });
+                querySnapshot.forEach((doc) => deletePromises.push(deleteDoc(doc.ref)));
                 await Promise.all(deletePromises);
             } catch(error) {
                 console.error("Error resetting history: ", error);
@@ -281,24 +361,96 @@
         maintenanceForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const price = parseFloat(priceInput.value);
-
             if (isNaN(price) || price <= 0 || totalKmState <= 0) {
                 resultLiters.textContent = 'Valores inválidos';
                 resultReais.textContent = 'Verifique o preço e o total de KM.';
                 resultLiters.classList.remove('text-green-400');
                 resultLiters.classList.add('text-red-400');
                 resultContainer.classList.remove('hidden');
+                lastCalculation = { price: 0, totalReais: 0 };
                 return;
             }
-
             const totalLiters = (totalKmState / 12) + ((totalKmState * 0.12) / price);
             const totalReais = totalLiters * price;
             
+            lastCalculation = { price, totalReais };
+
             resultLiters.textContent = `${totalLiters.toFixed(2)} Litros`;
             resultReais.textContent = `(equivalente a R$ ${totalReais.toFixed(2)})`;
             resultLiters.classList.remove('text-red-400');
             resultLiters.classList.add('text-green-400');
             resultContainer.classList.remove('hidden');
+        });
+        
+        generateReportBtn.addEventListener('click', () => {
+            if (lastCalculation.totalReais <= 0) {
+                alert('Por favor, clique em "Calcular" primeiro para obter os valores antes de gerar o relatório.');
+                return;
+            }
+            document.getElementById('report-user').textContent = `Usuário: ${auth.currentUser.displayName || auth.currentUser.email}`;
+            document.getElementById('report-date').textContent = `Gerado em: ${new Date().toLocaleDateString('pt-BR')}`;
+            document.getElementById('report-total-km').textContent = `${totalKmState.toFixed(0)} KM`;
+            document.getElementById('report-fuel-price').textContent = `R$ ${lastCalculation.price.toFixed(2)}`;
+            document.getElementById('report-final-value').textContent = `R$ ${lastCalculation.totalReais.toFixed(2)}`;
+
+            const tableBody = document.getElementById('report-history-table');
+            tableBody.innerHTML = '';
+            if(tripsState.length > 0){
+                tripsState.forEach(trip => {
+                    const row = document.createElement('tr');
+                    const date = trip.date ? trip.date.toDate().toLocaleDateString('pt-BR') : 'N/A';
+                    row.innerHTML = `
+                        <td class="py-2 px-4 border-b">${date}</td>
+                        <td class="py-2 px-4 border-b">${trip.obs || '-'}</td>
+                        <td class="py-2 px-4 border-b text-right">${trip.km} KM</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                 tableBody.innerHTML = `<tr><td colspan="3" class="text-center py-4">Nenhum registro no histórico.</td></tr>`;
+            }
+
+            reportSection.classList.remove('hidden');
+            appContainer.classList.add('hidden');
+        });
+        
+        printBtn.addEventListener('click', () => window.print());
+
+        shareBtn.addEventListener('click', async () => {
+            const reportElement = document.getElementById('report-section');
+            const reportActions = document.getElementById('report-actions');
+            
+            reportActions.style.visibility = 'hidden'; // Hide buttons for the screenshot
+            
+            try {
+                const canvas = await html2canvas(reportElement);
+                canvas.toBlob(async (blob) => {
+                    if (blob) {
+                        const file = new File([blob], 'relatorio.png', { type: 'image/png' });
+                        const shareData = {
+                            files: [file],
+                            title: 'Relatório de Manutenção Veicular',
+                            text: 'Segue o relatório de rodagem.'
+                        };
+
+                        if (navigator.canShare && navigator.canShare(shareData)) {
+                            await navigator.share(shareData);
+                        } else {
+                            alert('O compartilhamento de arquivos não é suportado neste navegador.');
+                        }
+                    }
+                     reportActions.style.visibility = 'visible'; // Show buttons again
+                }, 'image/png');
+            } catch (error) {
+                console.error('Erro ao gerar imagem:', error);
+                alert('Ocorreu um erro ao gerar a imagem do relatório.');
+                reportActions.style.visibility = 'visible'; // Show buttons again in case of error
+            }
+        });
+
+        backToAppBtn.addEventListener('click', () => {
+            reportSection.classList.add('hidden');
+            appContainer.classList.remove('hidden');
         });
 
     </script>
