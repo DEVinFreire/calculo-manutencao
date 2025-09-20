@@ -59,55 +59,85 @@
     <div id="app-container" class="w-full max-w-md space-y-6 hidden">
         <!-- User Info and Logout -->
         <div class="bg-gray-800 p-3 sm:p-4 rounded-2xl shadow-lg border border-gray-700 flex justify-between items-center">
-             <div id="user-info" class="text-sm text-gray-300 truncate pr-2"></div>
-             <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-1 px-3 rounded-lg transition-transform transform hover:scale-105 shadow-md flex-shrink-0">
-                 Sair
-             </button>
+            <div id="user-info" class="text-sm text-gray-300 truncate pr-2"></div>
+            <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-1 px-3 rounded-lg transition-transform transform hover:scale-105 shadow-md flex-shrink-0">
+                Sair
+            </button>
         </div>
-        <!-- Add Trip Form -->
-        <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
-            <h2 class="text-xl font-bold text-cyan-400 mb-4 text-center">Adicionar Nova Rodagem</h2>
-            <form id="add-km-form" class="space-y-4">
-                <div>
-                    <label for="new-km" class="block text-sm font-medium text-gray-300 mb-2">KM da Viagem</label>
-                    <input type="number" id="new-km" name="new-km" placeholder="Ex: 50" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition">
-                </div>
-                <div>
-                    <label for="new-obs" class="block text-sm font-medium text-gray-300 mb-2">Observação (Opcional)</label>
-                    <input type="text" id="new-obs" name="new-obs" placeholder="Ex: Ida ao médico" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition">
-                </div>
-                <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 shadow-lg">
-                    Adicionar Rodagem
-                </button>
-            </form>
+
+        <!-- Forms Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Add Trip Form -->
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-2xl border border-gray-700">
+                <h2 class="text-xl font-bold text-cyan-400 mb-4 text-center">Adicionar Rodagem</h2>
+                <form id="add-km-form" class="space-y-4">
+                    <div>
+                        <label for="new-km" class="block text-sm font-medium text-gray-300 mb-2">KM da Viagem</label>
+                        <input type="number" id="new-km" name="new-km" placeholder="Ex: 50" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition">
+                    </div>
+                    <div>
+                        <label for="new-obs" class="block text-sm font-medium text-gray-300 mb-2">Observação</label>
+                        <input type="text" id="new-obs" name="new-obs" placeholder="Ex: Ida ao médico" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition">
+                    </div>
+                    <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 shadow-lg">
+                        Adicionar
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Refueling Form -->
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-2xl border border-gray-700">
+                <h2 class="text-xl font-bold text-yellow-400 mb-4 text-center">Adicionar Abastecimento</h2>
+                <form id="add-refueling-form" class="space-y-4">
+                    <div>
+                        <label for="refueling-value" class="block text-sm font-medium text-gray-300 mb-2">Valor Abastecido (R$)</label>
+                        <input type="number" id="refueling-value" name="refueling-value" step="0.01" placeholder="Ex: 100.00" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition">
+                    </div>
+                    <div>
+                        <label for="refueling-obs" class="block text-sm font-medium text-gray-300 mb-2">Observação</label>
+                        <input type="text" id="refueling-obs" name="refueling-obs" placeholder="Ex: Posto Shell" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition">
+                    </div>
+                    <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 shadow-lg">
+                        Adicionar
+                    </button>
+                </form>
+            </div>
         </div>
+
         <!-- History -->
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-cyan-400">Histórico de Rodagem</h2>
+                <h2 class="text-xl font-bold text-cyan-400">Histórico Geral</h2>
                 <button id="reset-btn" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-1 px-3 rounded-lg transition-transform transform hover:scale-105 shadow-md">
-                    Resetar
+                    Resetar Tudo
                 </button>
             </div>
-            <div id="history-list" class="space-y-2 max-h-48 overflow-y-auto pr-2 mb-4">
-                <p id="history-placeholder" class="text-gray-500 text-center">Nenhuma rodagem adicionada.</p>
+            <div id="history-list" class="space-y-3 max-h-60 overflow-y-auto pr-2 mb-4">
+                <p id="history-placeholder" class="text-gray-500 text-center py-4">Nenhum registro adicionado.</p>
             </div>
-            <div class="mt-4 pt-4 border-t border-gray-700 text-center">
-                <p class="text-gray-400">Total de KM Rodados</p>
-                <p><span id="total-km" class="text-3xl font-bold text-white">0</span> <span class="text-gray-400">KM</span></p>
+            <div class="mt-4 pt-4 border-t border-gray-700 grid grid-cols-2 gap-4 text-center">
+                <div>
+                    <p class="text-gray-400">Total KM Rodados</p>
+                    <p><span id="total-km" class="text-3xl font-bold text-white">0</span> <span class="text-gray-400">KM</span></p>
+                </div>
+                <div>
+                    <p class="text-gray-400">Total Abastecido</p>
+                    <p><span id="total-refueling" class="text-3xl font-bold text-white">0.00</span> <span class="text-gray-400">R$</span></p>
+                </div>
             </div>
         </div>
+
         <!-- Calculation -->
         <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="text-center mb-8">
                 <h1 class="text-2xl font-bold text-cyan-400">Calcular Custo Final</h1>
-                <p class="text-gray-400 mt-1">Com base no total de KM do histórico.</p>
+                <p class="text-gray-400 mt-1">Com base no histórico e abastecimentos.</p>
             </div>
             <form id="maintenance-form" class="space-y-6">
                 <div>
                     <label for="price" class="block text-sm font-medium text-gray-300 mb-2">Preço do Litro de Combustível (R$)</label>
                     <div class="relative">
-                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">R$</span>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">R$</span>
                         <input type="number" id="price" name="price" step="0.01" placeholder="Ex: 5.89" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 pl-10 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition">
                     </div>
                 </div>
@@ -121,39 +151,43 @@
                 </div>
             </form>
             <div id="result-container" class="mt-8 text-center hidden">
-                <p class="text-gray-400">Valor Total a ser Pago:</p>
-                <p id="result-liters" class="text-4xl font-bold text-green-400 mt-2"></p>
-                <p id="result-reais" class="text-2xl text-gray-300 mt-1"></p>
+                <p class="text-gray-400">Valor Final a ser Pago:</p>
+                <p id="result-reais" class="text-4xl font-bold text-green-400 mt-2"></p>
+                <p id="result-explanation" class="text-sm text-gray-300 mt-1"></p>
             </div>
         </div>
     </div>
 
-     <!-- Report Section (hidden by default) -->
+    <!-- Report Section (hidden by default) -->
     <div id="report-section" class="hidden absolute top-0 left-0 w-full bg-white text-black p-4 sm:p-8">
         <div class="max-w-4xl mx-auto">
             <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Relatório de Rodagem</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Relatório de Custos Veiculares</h1>
                     <p id="report-user" class="text-gray-600"></p>
                     <p id="report-date" class="text-gray-600"></p>
                 </div>
                 <div id="report-actions" class="flex flex-wrap items-center justify-start gap-2">
-                     <button id="back-to-app-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Voltar</button>
-                     <button id="share-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Compartilhar</button>
-                     <button id="print-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Imprimir</button>
+                    <button id="back-to-app-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Voltar</button>
+                    <button id="share-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Compartilhar</button>
+                    <button id="print-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg">Imprimir</button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 text-center">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 text-center">
                 <div class="bg-gray-100 p-4 rounded-lg">
                     <p class="text-sm font-bold text-gray-600">Total KM Rodados</p>
                     <p id="report-total-km" class="text-2xl font-bold text-gray-900"></p>
                 </div>
                 <div class="bg-gray-100 p-4 rounded-lg">
-                    <p class="text-sm font-bold text-gray-600">Preço do Combustível</p>
+                    <p class="text-sm font-bold text-gray-600">Preço Combustível</p>
                     <p id="report-fuel-price" class="text-2xl font-bold text-gray-900"></p>
                 </div>
-                 <div class="bg-green-100 p-4 rounded-lg border border-green-300">
+                <div class="bg-yellow-100 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-yellow-800">Total Abastecido</p>
+                    <p id="report-total-refueling" class="text-2xl font-bold text-yellow-900"></p>
+                </div>
+                <div class="bg-green-100 p-4 rounded-lg border border-green-300">
                     <p class="text-sm font-bold text-green-800">Valor Final a Pagar</p>
                     <p id="report-final-value" class="text-2xl font-bold text-green-900"></p>
                 </div>
@@ -161,31 +195,50 @@
 
             <div class="mb-8 p-4 bg-gray-50 rounded-lg border">
                 <h2 class="text-xl font-bold text-gray-800 mb-2">Explicação do Cálculo</h2>
-                <p class="text-gray-700">O valor final é composto por duas partes, convertidas para Reais (R$):</p>
+                <p class="text-gray-700">O valor final é o custo total de combustível e manutenção, subtraindo o que já foi pago em abastecimentos:</p>
                 <ul class="list-disc list-inside mt-2 space-y-1 text-gray-600">
-                    <li><b>Custo de Combustível:</b> O total de KM é dividido por 12 (considerando um consumo de 12 km/l).</li>
-                    <li><b>Custo de Manutenção:</b> O total de KM é multiplicado por um fator de R$ 0,12 por quilômetro rodado.</li>
+                    <li><b>Custo Bruto:</b> Soma do custo de combustível (KM rodado / 12 km/l) e manutenção (R$ 0,12 por KM).</li>
+                    <li><b>Abatimento:</b> Subtração do valor total já registrado em abastecimentos.</li>
                 </ul>
                 <p class="mt-4 font-mono text-sm bg-gray-200 p-2 rounded">
-                    Fórmula: Valor em Reais = ( (Total KM / 12) + (Total KM * 0.12) / Preço do Litro ) * Preço do Litro
+                    Fórmula: Valor Final = ( (Total KM / 12 * Preço Litro) + (Total KM * 0.12) ) - Total Abastecido
                 </p>
             </div>
 
-            <div>
-                <h2 class="text-xl font-bold text-gray-800 mb-4">Detalhes das Viagens</h2>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white border">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th class="py-2 px-4 border-b text-left">Data</th>
-                                <th class="py-2 px-4 border-b text-left">Observação</th>
-                                <th class="py-2 px-4 border-b text-right">KM</th>
-                            </tr>
-                        </thead>
-                        <tbody id="report-history-table">
-                            <!-- Rows will be injected here -->
-                        </tbody>
-                    </table>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Detalhes das Viagens</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="py-2 px-4 border-b text-left">Data</th>
+                                    <th class="py-2 px-4 border-b text-left">Observação</th>
+                                    <th class="py-2 px-4 border-b text-right">KM</th>
+                                </tr>
+                            </thead>
+                            <tbody id="report-history-table">
+                                <!-- Trip rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Detalhes dos Abastecimentos</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="py-2 px-4 border-b text-left">Data</th>
+                                    <th class="py-2 px-4 border-b text-left">Observação</th>
+                                    <th class="py-2 px-4 border-b text-right">Valor (R$)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="report-refueling-table">
+                                <!-- Refueling rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,7 +248,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, doc, deleteDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, doc, deleteDoc, getDocs, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- ELEMENT REFERENCES ---
         const loginContainer = document.getElementById('login-container');
@@ -203,31 +256,40 @@
         const loginBtn = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
         const userInfo = document.getElementById('user-info');
+        
         const addKmForm = document.getElementById('add-km-form');
         const newKmInput = document.getElementById('new-km');
         const newObsInput = document.getElementById('new-obs');
+        
+        const addRefuelingForm = document.getElementById('add-refueling-form');
+        const refuelingValueInput = document.getElementById('refueling-value');
+        const refuelingObsInput = document.getElementById('refueling-obs');
+
         const historyList = document.getElementById('history-list');
         const historyPlaceholder = document.getElementById('history-placeholder');
         const totalKmSpan = document.getElementById('total-km');
+        const totalRefuelingSpan = document.getElementById('total-refueling');
         const resetBtn = document.getElementById('reset-btn');
+        
         const maintenanceForm = document.getElementById('maintenance-form');
         const priceInput = document.getElementById('price');
         const resultContainer = document.getElementById('result-container');
-        const resultLiters = document.getElementById('result-liters');
         const resultReais = document.getElementById('result-reais');
+        const resultExplanation = document.getElementById('result-explanation');
+        
         const generateReportBtn = document.getElementById('generate-report-btn');
         const reportSection = document.getElementById('report-section');
         const printBtn = document.getElementById('print-btn');
         const shareBtn = document.getElementById('share-btn');
         const backToAppBtn = document.getElementById('back-to-app-btn');
-        
+
         // --- APP STATE ---
         let db, auth, userId;
         let totalKmState = 0;
-        let tripsCollectionRef;
-        let tripsState = [];
-        let lastCalculation = { price: 0, totalReais: 0 };
-
+        let totalRefuelingState = 0;
+        let tripsCollectionRef, refuelingsCollectionRef;
+        let combinedHistoryState = [];
+        let lastCalculation = { price: 0, finalValue: 0 };
 
         // --- FIREBASE SETUP ---
         const firebaseConfig = {
@@ -238,34 +300,47 @@
             messagingSenderId: "463638882821",
             appId: "1:463638882821:web:17720fa4ea9af3e9ee4a6c"
         };
-        
+
         const app = initializeApp(firebaseConfig);
-        const appId = firebaseConfig.appId; 
+        const appId = firebaseConfig.appId;
         db = getFirestore(app);
         auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        
+
         // --- AUTHENTICATION ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 userId = user.uid;
-                tripsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/trips`);
-                listenForTrips();
+                const basePath = `artifacts/${appId}/users/${userId}`;
+                tripsCollectionRef = collection(db, `${basePath}/trips`);
+                refuelingsCollectionRef = collection(db, `${basePath}/refuelings`);
+                
+                listenForHistory();
+                
                 userInfo.textContent = `Olá, ${user.displayName || user.email}`;
                 loginContainer.classList.add('hidden');
                 appContainer.classList.remove('hidden');
             } else {
                 userId = null;
                 tripsCollectionRef = null;
+                refuelingsCollectionRef = null;
+                
                 historyList.innerHTML = '';
                 historyList.appendChild(historyPlaceholder);
                 historyPlaceholder.classList.remove('hidden');
+                
                 totalKmState = 0;
+                totalRefuelingState = 0;
                 totalKmSpan.textContent = '0';
+                totalRefuelingSpan.textContent = '0.00';
+                
                 resultContainer.classList.add('hidden');
                 priceInput.value = '';
                 newKmInput.value = '';
                 newObsInput.value = '';
+                refuelingValueInput.value = '';
+                refuelingObsInput.value = '';
+                
                 loginContainer.classList.remove('hidden');
                 appContainer.classList.add('hidden');
                 reportSection.classList.add('hidden');
@@ -273,57 +348,87 @@
         });
 
         // --- DATA HANDLING & UI ---
-        const listenForTrips = () => {
-            if (!tripsCollectionRef) return;
-            const q = query(tripsCollectionRef);
-            onSnapshot(q, (snapshot) => {
-                let currentTotalKm = 0;
-                historyList.innerHTML = ''; 
-                if (snapshot.empty) {
-                    historyList.appendChild(historyPlaceholder);
-                    historyPlaceholder.classList.remove('hidden');
-                    tripsState = [];
-                } else {
-                    historyPlaceholder.classList.add('hidden');
-                    const trips = [];
-                    snapshot.forEach(doc => {
-                        trips.push({ id: doc.id, ...doc.data() });
-                    });
-                    trips.sort((a, b) => (b.date?.toDate() || 0) - (a.date?.toDate() || 0));
-                    tripsState = trips;
+        const listenForHistory = () => {
+            if (!tripsCollectionRef || !refuelingsCollectionRef) return;
 
-                    trips.forEach(trip => {
-                        currentTotalKm += trip.km;
-                        const date = trip.date ? trip.date.toDate().toLocaleDateString('pt-BR') : 'Data inválida';
-                        const obsText = trip.obs ? `<p class="text-xs text-gray-400 mt-1 truncate">${trip.obs}</p>` : '';
-                        const tripElement = document.createElement('div');
-                        tripElement.className = 'bg-gray-700 p-3 rounded-lg';
-                        tripElement.innerHTML = `
-                            <div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-300">${date}</span>
-                                    <span class="font-semibold text-white">${trip.km} KM</span>
-                                </div>
-                                ${obsText}
-                            </div>
-                        `;
-                        historyList.appendChild(tripElement);
-                    });
-                }
-                totalKmState = currentTotalKm;
-                totalKmSpan.textContent = currentTotalKm.toFixed(0);
+            const qTrips = query(tripsCollectionRef);
+            const qRefuelings = query(refuelingsCollectionRef);
+
+            const unsubTrips = onSnapshot(qTrips, (snapshot) => {
+                updateCombinedHistory();
+            });
+            const unsubRefuelings = onSnapshot(qRefuelings, (snapshot) => {
+                updateCombinedHistory();
             });
         };
+        
+        const updateCombinedHistory = async () => {
+            const tripsSnapshot = await getDocs(query(tripsCollectionRef));
+            const refuelingsSnapshot = await getDocs(query(refuelingsCollectionRef));
+
+            let currentTotalKm = 0;
+            let currentTotalRefueling = 0;
+            let combined = [];
+
+            tripsSnapshot.forEach(doc => {
+                const data = doc.data();
+                currentTotalKm += data.km;
+                combined.push({ id: doc.id, type: 'trip', ...data });
+            });
+
+            refuelingsSnapshot.forEach(doc => {
+                const data = doc.data();
+                currentTotalRefueling += data.value;
+                combined.push({ id: doc.id, type: 'refueling', ...data });
+            });
+
+            combined.sort((a, b) => (b.date?.toDate() || 0) - (a.date?.toDate() || 0));
+            combinedHistoryState = combined;
+
+            historyList.innerHTML = '';
+            if (combined.length === 0) {
+                historyList.appendChild(historyPlaceholder);
+                historyPlaceholder.classList.remove('hidden');
+            } else {
+                historyPlaceholder.classList.add('hidden');
+                combined.forEach(item => {
+                    const date = item.date ? item.date.toDate().toLocaleDateString('pt-BR') : 'Data inválida';
+                    let element;
+                    if (item.type === 'trip') {
+                        element = createHistoryElement('bg-gray-700', date, `${item.km} KM`, item.obs, 'text-cyan-400');
+                    } else { // refueling
+                        element = createHistoryElement('bg-gray-700', date, `R$ ${item.value.toFixed(2)}`, item.obs, 'text-yellow-400');
+                    }
+                    historyList.appendChild(element);
+                });
+            }
+
+            totalKmState = currentTotalKm;
+            totalRefuelingState = currentTotalRefueling;
+            totalKmSpan.textContent = currentTotalKm.toFixed(0);
+            totalRefuelingSpan.textContent = currentTotalRefueling.toFixed(2);
+        };
+
+        const createHistoryElement = (bgColor, date, value, obs, valueColor) => {
+            const div = document.createElement('div');
+            div.className = `${bgColor} p-3 rounded-lg flex justify-between items-center`;
+            const obsText = obs ? `<p class="text-xs text-gray-400 mt-1 truncate">${obs}</p>` : '';
+            div.innerHTML = `
+                <div>
+                    <span class="text-sm text-gray-300">${date}</span>
+                    ${obsText}
+                </div>
+                <span class="font-semibold ${valueColor} text-lg">${value}</span>
+            `;
+            return div;
+        };
+
 
         // --- EVENT LISTENERS ---
         loginBtn.addEventListener('click', () => {
             signInWithPopup(auth, provider).catch((error) => {
                 console.error("Authentication failed: ", error);
-                if (error.code === 'auth/unauthorized-domain') {
-                    alert("Erro: Domínio não autorizado.\n\nPara que o login funcione, você precisa autorizar este domínio no seu projeto Firebase.\n\n1. Acesse o Firebase Console.\n2. Vá para Authentication -> Definições -> Domínios autorizados.\n3. Clique em 'Adicionar domínio' e insira: " + window.location.hostname);
-                } else {
-                    alert("Falha no login com Google. Verifique o console para mais detalhes.");
-                }
+                alert("Falha no login com Google. Verifique o console para mais detalhes.");
             });
         });
 
@@ -335,25 +440,47 @@
             const obs = newObsInput.value.trim();
             if (!isNaN(km) && km > 0 && tripsCollectionRef) {
                 try {
-                    const tripData = { km: km, date: serverTimestamp() };
+                    const tripData = { km: km, date: serverTimestamp(), type: 'trip' };
                     if (obs) tripData.obs = obs;
                     await addDoc(tripsCollectionRef, tripData);
                     newKmInput.value = '';
                     newObsInput.value = '';
                 } catch (error) {
-                    console.error("Error adding document: ", error);
+                    console.error("Error adding trip: ", error);
+                }
+            }
+        });
+        
+        addRefuelingForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const value = parseFloat(refuelingValueInput.value);
+            const obs = refuelingObsInput.value.trim();
+            if (!isNaN(value) && value > 0 && refuelingsCollectionRef) {
+                try {
+                    const refuelingData = { value: value, date: serverTimestamp(), type: 'refueling' };
+                    if (obs) refuelingData.obs = obs;
+                    await addDoc(refuelingsCollectionRef, refuelingData);
+                    refuelingValueInput.value = '';
+                    refuelingObsInput.value = '';
+                } catch (error) {
+                    console.error("Error adding refueling: ", error);
                 }
             }
         });
 
         resetBtn.addEventListener('click', async () => {
-            if (!window.confirm('Tem certeza que deseja apagar todo o histórico? Esta ação não pode ser desfeita.')) return;
-            if (!tripsCollectionRef) return;
+            if (!window.confirm('Tem certeza que deseja apagar TODO o histórico (rodagens e abastecimentos)? Esta ação não pode ser desfeita.')) return;
+            if (!tripsCollectionRef || !refuelingsCollectionRef) return;
+            
             try {
-                const querySnapshot = await getDocs(tripsCollectionRef);
-                const deletePromises = [];
-                querySnapshot.forEach((doc) => deletePromises.push(deleteDoc(doc.ref)));
-                await Promise.all(deletePromises);
+                const batch = writeBatch(db);
+                const tripsSnapshot = await getDocs(tripsCollectionRef);
+                tripsSnapshot.forEach(doc => batch.delete(doc.ref));
+                
+                const refuelingsSnapshot = await getDocs(refuelingsCollectionRef);
+                refuelingsSnapshot.forEach(doc => batch.delete(doc.ref));
+                
+                await batch.commit();
             } catch(error) {
                 console.error("Error resetting history: ", error);
             }
@@ -362,53 +489,77 @@
         maintenanceForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const price = parseFloat(priceInput.value);
-            if (isNaN(price) || price <= 0 || totalKmState <= 0) {
-                resultLiters.textContent = 'Valores inválidos';
-                resultReais.textContent = 'Verifique o preço e o total de KM.';
-                resultLiters.classList.remove('text-green-400');
-                resultLiters.classList.add('text-red-400');
+            if (isNaN(price) || price <= 0) {
+                resultReais.textContent = 'Preço inválido';
+                resultExplanation.textContent = 'Insira um valor válido para o combustível.';
+                resultReais.classList.remove('text-green-400');
+                resultReais.classList.add('text-red-400');
                 resultContainer.classList.remove('hidden');
-                lastCalculation = { price: 0, totalReais: 0 };
+                lastCalculation = { price: 0, finalValue: 0 };
                 return;
             }
-            const totalLiters = (totalKmState / 12) + ((totalKmState * 0.12) / price);
-            const totalReais = totalLiters * price;
             
-            lastCalculation = { price, totalReais };
+            const fuelCost = (totalKmState / 12) * price;
+            const maintenanceCost = totalKmState * 0.12;
+            const grossValue = fuelCost + maintenanceCost;
+            const finalValue = grossValue - totalRefuelingState;
 
-            resultLiters.textContent = `${totalLiters.toFixed(2)} Litros`;
-            resultReais.textContent = `(equivalente a R$ ${totalReais.toFixed(2)})`;
-            resultLiters.classList.remove('text-red-400');
-            resultLiters.classList.add('text-green-400');
+            lastCalculation = { price, finalValue, grossValue, fuelCost, maintenanceCost };
+
+            resultReais.textContent = `R$ ${finalValue.toFixed(2)}`;
+            resultExplanation.textContent = `(Custo total de R$ ${grossValue.toFixed(2)} - R$ ${totalRefuelingState.toFixed(2)} já pagos)`;
+            resultReais.classList.remove('text-red-400');
+            resultReais.classList.add('text-green-400');
             resultContainer.classList.remove('hidden');
         });
         
         generateReportBtn.addEventListener('click', () => {
-            if (lastCalculation.totalReais <= 0) {
+            if (lastCalculation.finalValue === undefined) {
                 alert('Por favor, clique em "Calcular" primeiro para obter os valores antes de gerar o relatório.');
                 return;
             }
+            
             document.getElementById('report-user').textContent = `Usuário: ${auth.currentUser.displayName || auth.currentUser.email}`;
             document.getElementById('report-date').textContent = `Gerado em: ${new Date().toLocaleDateString('pt-BR')}`;
             document.getElementById('report-total-km').textContent = `${totalKmState.toFixed(0)} KM`;
             document.getElementById('report-fuel-price').textContent = `R$ ${lastCalculation.price.toFixed(2)}`;
-            document.getElementById('report-final-value').textContent = `R$ ${lastCalculation.totalReais.toFixed(2)}`;
+            document.getElementById('report-total-refueling').textContent = `R$ ${totalRefuelingState.toFixed(2)}`;
+            document.getElementById('report-final-value').textContent = `R$ ${lastCalculation.finalValue.toFixed(2)}`;
 
-            const tableBody = document.getElementById('report-history-table');
-            tableBody.innerHTML = '';
-            if(tripsState.length > 0){
-                tripsState.forEach(trip => {
-                    const row = document.createElement('tr');
+            const tripTableBody = document.getElementById('report-history-table');
+            const refuelingTableBody = document.getElementById('report-refueling-table');
+            tripTableBody.innerHTML = '';
+            refuelingTableBody.innerHTML = '';
+
+            const trips = combinedHistoryState.filter(item => item.type === 'trip');
+            const refuelings = combinedHistoryState.filter(item => item.type === 'refueling');
+
+            if (trips.length > 0) {
+                trips.forEach(trip => {
+                    const row = tripTableBody.insertRow();
                     const date = trip.date ? trip.date.toDate().toLocaleDateString('pt-BR') : 'N/A';
                     row.innerHTML = `
                         <td class="py-2 px-4 border-b">${date}</td>
                         <td class="py-2 px-4 border-b">${trip.obs || '-'}</td>
                         <td class="py-2 px-4 border-b text-right">${trip.km} KM</td>
                     `;
-                    tableBody.appendChild(row);
                 });
             } else {
-                 tableBody.innerHTML = `<tr><td colspan="3" class="text-center py-4">Nenhum registro no histórico.</td></tr>`;
+                tripTableBody.innerHTML = `<tr><td colspan="3" class="text-center py-4">Nenhuma viagem registrada.</td></tr>`;
+            }
+
+            if (refuelings.length > 0) {
+                refuelings.forEach(refueling => {
+                    const row = refuelingTableBody.insertRow();
+                    const date = refueling.date ? refueling.date.toDate().toLocaleDateString('pt-BR') : 'N/A';
+                    row.innerHTML = `
+                        <td class="py-2 px-4 border-b">${date}</td>
+                        <td class="py-2 px-4 border-b">${refueling.obs || '-'}</td>
+                        <td class="py-2 px-4 border-b text-right">R$ ${refueling.value.toFixed(2)}</td>
+                    `;
+                });
+            } else {
+                refuelingTableBody.innerHTML = `<tr><td colspan="3" class="text-center py-4">Nenhum abastecimento registrado.</td></tr>`;
             }
 
             reportSection.classList.remove('hidden');
@@ -420,32 +571,30 @@
         shareBtn.addEventListener('click', async () => {
             const reportElement = document.getElementById('report-section');
             const reportActions = document.getElementById('report-actions');
-            
-            reportActions.style.visibility = 'hidden'; // Hide buttons for the screenshot
+            reportActions.style.visibility = 'hidden';
             
             try {
-                const canvas = await html2canvas(reportElement);
+                const canvas = await html2canvas(reportElement, { scale: 2 }); // Higher scale for better quality
                 canvas.toBlob(async (blob) => {
                     if (blob) {
-                        const file = new File([blob], 'relatorio.png', { type: 'image/png' });
+                        const file = new File([blob], 'relatorio_custos.png', { type: 'image/png' });
                         const shareData = {
                             files: [file],
-                            title: 'Relatório de Manutenção Veicular',
-                            text: 'Segue o relatório de rodagem.'
+                            title: 'Relatório de Custos Veiculares',
+                            text: 'Segue o relatório de custos do veículo.'
                         };
-
                         if (navigator.canShare && navigator.canShare(shareData)) {
                             await navigator.share(shareData);
                         } else {
                             alert('O compartilhamento de arquivos não é suportado neste navegador.');
                         }
                     }
-                     reportActions.style.visibility = 'visible'; // Show buttons again
+                    reportActions.style.visibility = 'visible';
                 }, 'image/png');
             } catch (error) {
                 console.error('Erro ao gerar imagem:', error);
                 alert('Ocorreu um erro ao gerar a imagem do relatório.');
-                reportActions.style.visibility = 'visible'; // Show buttons again in case of error
+                reportActions.style.visibility = 'visible';
             }
         });
 
